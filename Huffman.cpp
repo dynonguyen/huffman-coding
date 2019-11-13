@@ -469,3 +469,12 @@ bool Huffman::decoding(char* in_path, char* out_path) {
 	fclose(out);
 	return true;
 }
+
+Huffman::~Huffman() {
+	for (int i = 0; i < 256; i++){
+		if (this->bitCodeTable[i].bits != NULL) {
+			delete[] this->bitCodeTable[i].bits;
+			this->bitCodeTable[i].bits = NULL;
+		}
+	}
+}

@@ -83,6 +83,7 @@ public:
 
 	bool decoding(char*, char*);					//Ham giai nen
 
+	~Huffman();
 };
 
 /* ========================== Thuat toan nen RLE =========================== */
