@@ -26,8 +26,13 @@
 #include <conio.h>
 #include <ctime>
 #include <sys/stat.h>
+#include <direct.h>
+#include <filesystem>
 
 using namespace std;
+
+const string FILE_NAME_EXTENSION_ENCODE = ".winzip";
+const string FILE_NAME_EXTENSION_DECODE = "_decode.txt";
 
 #define MAX_NODE 511		//cay nhi phan nen co 2n - 1 node (ma ASCII co 256 = n)
 #define MAX_BIT_CODE 2048   //so bit toi da cua mang bitCode[]

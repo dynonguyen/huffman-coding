@@ -50,6 +50,7 @@ void displayCursor(int pre_move, int move) {
 
 void menu() {
 
+	system("cls");
 	SetColor(3);
 	gotoxy(4, 2);
 	cout << "=================== WINZIP PRO v1.0 (LIMITED EDITION) ===================";
@@ -149,6 +150,25 @@ void optimizeSetup_2() {
 	ShowConsoleCursor(true);
 }
 
+int newFolder(string &path, bool type) {
+	string encode = "_Encode";
+	string decode = "_Decode";
+	if (type) {
+		int pos = path.find(decode);
+		if (pos != string::npos)
+			path.erase(pos, path.length());
+		path += encode;
+	}
+	else {
+		int pos = path.find(encode);
+		if (pos != string::npos)
+			path.erase(pos, path.length());
+		path += decode;
+	}
+	char* folderPath = stringToCharArray(path);
+	return _mkdir(folderPath);
+}
+
 void optimizeComp_Decomp_Folder(bool type) {
 
 	optimizeSetup_1();
@@ -163,13 +183,13 @@ void optimizeComp_Decomp_Folder(bool type) {
 	cout << ">> Enter the directory path [C:\\foldername]: ";
 	string path;
 	getline(cin, path);
-	in = in + path + " > data.txt";
+	in = in + "\"" + path + "\""  + " > data.txt";
 	char* inFile = stringToCharArray(in);
 
 	//ghi tat ca ten file trong thu muc co duong dan path vao file data.txt
-	//system(forfiles /p .path >> data.txt);
+	//system(forfiles /p "path" > data.txt)
 	system(inFile);
-
+	
 	//doc file data.txt
 	vector<string> fileName;
 	ifstream input("data.txt");
@@ -197,18 +217,9 @@ void optimizeComp_Decomp_Folder(bool type) {
 	}
 
 	//Tao ra thu muc chua file nen
-	string comp_path;
-	if(type)
-		comp_path = path + "_Encode";
-	else
-		comp_path = path + "_Decode";
-	
-	wchar_t* folderPath = new wchar_t[comp_path.length() + 1];
-	for (int i = 0; i < comp_path.length(); i++) {
-		folderPath[i] = comp_path[i];
-	}
-	folderPath[comp_path.length()] = NULL;
-	int status = _wmkdir(folderPath);
+	int status = newFolder(path, type);
+	if (status)
+		errorsMessage(0, 2, 8);
 
 	//nen cac file vao thu muc vua tao
 	//chuyen cac duong dan den file can nen tu string sang char*
@@ -223,7 +234,7 @@ void optimizeComp_Decomp_Folder(bool type) {
 	vector<string> fullFolderPath;
 	fullFolderPath.resize(fileName.size());
 	for (int i = 0; i < fileName.size(); i++) {
-		fullFolderPath[i] = comp_path + "\\";
+		fullFolderPath[i] = path + "\\";
 		for (int j = 1; j < fileName[i].size() - 1; ++j) {
 			if (fileName[i][j] == '.')
 				break;

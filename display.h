@@ -3,8 +3,6 @@
 
 #define TEXT_COLOR 1
 #define MAX_OPTION 4
-const string FILE_NAME_EXTENSION_ENCODE = ".winzip";
-const string FILE_NAME_EXTENSION_DECODE = "_decode.txt";
 
 //ham dua con tro den vi tri x, y
 void gotoxy(int , int );
@@ -32,6 +30,9 @@ string changeFileExtension(string , string);
 
 //tim duong dan cu the [path(file out) + namefile(file in)]
 void findOutputPath(string , string&);
+
+//tao 1 folder moi
+int newFolder(string&, bool);
 
 //ham nen (type = true) hoac giai nen(type = flase) 1 thu muc
 void optimizeComp_Decomp_Folder(bool type);

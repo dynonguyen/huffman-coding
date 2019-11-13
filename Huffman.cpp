@@ -177,20 +177,20 @@ bool Huffman::saveFreqStatisTable(FILE*& outFile) {
 	return true;
 }
 
-int Huffman::encoding(char* path_in, char* path_out) {
+int Huffman::encoding(char* in_path, char* out_path) {
 
 	//tao cay huffman
 	this->initHuffTree();
 
 	//tao bang thong ke
-	this->freqStatistics(path_in);
+	this->freqStatistics(in_path);
 
 	//dem node freq > 0 trong huffman tree
 	this->countNode();
 
 	//Neu co 1 node thi giai thuat nen theo RLE va tra ve -1
 	if (this->n_Node == 1) {
-		if (runLengthEncoding(path_in, path_out)) {
+		if (runLengthEncoding(in_path, out_path)) {
 			this->typeEncode = 'r';		//Nen theo kieu RLE
 			return -1;
 		}
@@ -206,7 +206,7 @@ int Huffman::encoding(char* path_in, char* path_out) {
 
 	//mo file de Ghi
 	FILE* outFile;
-	errno_t err = fopen_s(&outFile, path_out, "wb");
+	errno_t err = fopen_s(&outFile, out_path, "wb");
 	if (!outFile) {
 		return 0;
 	}
@@ -222,7 +222,7 @@ int Huffman::encoding(char* path_in, char* path_out) {
 
 	//mo file de doc
 	FILE* inFile;
-	errno_t err2 = fopen_s(&inFile, path_in, "rb");
+	errno_t err2 = fopen_s(&inFile, in_path, "rb");
 	if (!inFile) {
 		return 0;
 	}
@@ -265,12 +265,12 @@ int Huffman::encoding(char* path_in, char* path_out) {
 }
 
 /* ========================== Thuat toan nen RLE =========================== */
-bool runLengthEncoding(char* path_in, char* path_out) {
-	ifstream in(path_in, ios::binary);
+bool runLengthEncoding(char* in_path, char* out_path) {
+	ifstream in(in_path, ios::binary);
 	if (in.fail())
 		return false;
 
-	ofstream out(path_out, ios::binary | ios::trunc);
+	ofstream out(out_path, ios::binary | ios::trunc);
 	if (out.fail())
 		return false;
 
@@ -311,24 +311,24 @@ bool runLengthEncoding(char* path_in, char* path_out) {
 	return true;
 }
 
-bool runLengthDecoding(char* path_in) {
+bool runLengthDecoding(char* in_path) {
 
 	//mo file giai nen
-	ifstream in(path_in, ios::binary);
+	ifstream in(in_path, ios::binary);
 	if (in.fail())
 		return false;
 
 	//tao file ghi du lieu da giai nen
 	//Tao ten file giai nen
-	char* nameFile = new char[18 + strlen(path_in)];
+	char* nameFile = new char[18 + strlen(in_path)];
 	int count = 0;
-	for (int i = 0; i < strlen(path_in); ++i) {
-		if (path_in[i] == '.')
+	for (int i = 0; i < strlen(in_path); ++i) {
+		if (in_path[i] == '.')
 			break;
-		nameFile[i] = path_in[i];
+		nameFile[i] = in_path[i];
 		++count;
 	}
-	string s = "_Decompression.txt";
+	string s = FILE_NAME_EXTENSION_DECODE;
 	for (int i = 0; i < s.length(); ++i) {
 		nameFile[count + i] = s[i];
 	}
@@ -389,11 +389,11 @@ bool Huffman::recreateHuffTree(FILE*& in) {
 	return true;
 }
 
-bool Huffman::decoding(char* path_in, char* path_out) {
+bool Huffman::decoding(char* in_path, char* out_path) {
 
 	//mo file doc
 	FILE* in;
-	errno_t err = fopen_s(&in, path_in, "rb");
+	errno_t err = fopen_s(&in, in_path, "rb");
 	if (!in) {
 		return 0;
 	}
@@ -402,7 +402,7 @@ bool Huffman::decoding(char* path_in, char* path_out) {
 	this->recreateHuffTree(in);
 
 	if (this->typeEncode == 'r')
-		return runLengthDecoding(path_in);
+		return runLengthDecoding(in_path);
 
 	int pos_root = this->buildHuffmanTree();
 
@@ -429,7 +429,7 @@ bool Huffman::decoding(char* path_in, char* path_out) {
 
 	//mo file de ghi
 	FILE* out;
-	errno_t err_2 = fopen_s(&out, path_out, "wb");
+	errno_t err_2 = fopen_s(&out, out_path, "wb");
 	if (!out) {
 		return 0;
 	}
