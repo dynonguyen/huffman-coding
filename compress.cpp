@@ -1,6 +1,6 @@
 #include "compress.h"
 
-//==================== CAC HAM HO TRO NEN-GIAI NEN FILE TXT ====================//
+// ======================= CAC HAM HO TRO NEN-GIAI NEN ======================= //
 char* stringToCharArray(string str) {
 	char* res = new char[str.size() + 1];
 	for (int i = 0; i < str.size(); i++) {
@@ -21,7 +21,7 @@ string changeFileExtension(string str, string fileName_Ex) {
 	return res;
 }
 
-void setOutputPath(string in_path, string& out) {
+void setOutputPath(string in_path, string& out, string extension) {
 	string out_path = "";
 	out += "\\";
 	for (int i = in_path.length() - FILE_NAME_EXTENSION_ENCODE.size() - 1; i >= 0; --i) {
@@ -32,14 +32,26 @@ void setOutputPath(string in_path, string& out) {
 	for (int i = out_path.length() - 1; i >= 0; --i) {
 		out += out_path[i];
 	}
-	out += FILE_NAME_EXTENSION_DECODE_TEXT;
+	out += FILE_NAME_EXTENSION_DECODE + extension;
 }
 
-// =============== NEN FILE TEXT =================== //
-int compressFileText() {
+string charArrayToString(char* s) {
+	if (s == NULL)
+		return "";
+	string res = "";
+	for (int i = 0; i < strlen(s); i++){
+		res += s[i];
+	}
+	return res;
+}
+
+// ============================== NEN FILE ================================== //
+int compressFile() {
 	cout << ">> Enter the original file path (EX: C:\\filename.txt): ";
 	string in;
 	getline(cin, in);
+	if (!isFile(in))
+		return 0;
 	char* in_path = stringToCharArray(in);
 
 	//file dau ra
@@ -55,7 +67,7 @@ int compressFileText() {
 	return check;
 }
 
-// ==================== CAC HAM HO TRO NEN-GIAI NEN FOLDER TXT =================== //
+// ==================== CAC HAM HO TRO NEN-GIAI NEN FOLDER =================== //
 bool isFolder(string path) {
 	if (path.find(".") == string::npos)
 		return true;
@@ -63,8 +75,8 @@ bool isFolder(string path) {
 	return false;
 }
 
-bool isFileTxt(string path) {
-	if (path.find(".txt") != string::npos)
+bool isFile(string path) {
+	if (path.find(".") != string::npos)
 		return true;
 	return false;
 }
@@ -118,7 +130,7 @@ vector<string> saveDirectoryStructure(string path) {
 		if (input.eof())
 			break;
 		string str = path + "\\";
-		if (isFileTxt(s)) {
+		if (isFile(s)) {
 			for (int i = 1; i < s.length() - 1; ++i)
 				str += s[i];
 			result.push_back(str);
@@ -137,9 +149,9 @@ vector<string> saveDirectoryStructure(string path) {
 	return result;
 }
 
-// =============== NEN 1 FOLDER CHUA FILE TEXT =============== //
+// ======================= NEN 1 FOLDER CHUA FILE ======================== //
 
-int compressFolderTxt() {
+int compressFolder() {
 	cout << ">> Enter the directory path [C:\\foldername]: ";
 	string in;
 	getline(cin, in);
@@ -162,7 +174,7 @@ int compressFolderTxt() {
 	output.close();
 
 	for (int i = 0; i < path.size(); ++i){
-		if (isFileTxt(path[i])) {
+		if (isFile(path[i])) {
 			char* com_path = stringToCharArray(path[i]);
 			//tien hanh nen
 			Huffman huff;

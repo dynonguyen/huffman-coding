@@ -14,18 +14,22 @@ void Huffman::initHuffTree() {
 void Huffman::freqStatistics(char* path) {
 
 	//mo file doc
-	FILE* in;
+	FILE* in = NULL;
 	errno_t err = fopen_s(&in, path, "rb");
-	if (!in) {
+	if (in == NULL) {
 		return;
 	}
 
 	char c;
 	while (1) {
-		fread(&c, sizeof(c), 1, in);
+		fread(&c, sizeof(char), 1, in);
+		
 		if (feof(in))
 			break;
-		this->huffTree[c].freq++;
+		if (c < 0)
+			this->huffTree[(int)(c+256)].freq++;
+		else
+			this->huffTree[c].freq++;
 	}
 
 	fclose(in);
@@ -177,7 +181,7 @@ bool Huffman::saveFreqStatisTable(FILE*& outFile) {
 	return true;
 }
 
-int Huffman::encoding(char* in_path, char* out_path) {
+int Huffman::encoding(char* in_path, char* out_path,int type) {
 
 	//tao cay huffman
 	this->initHuffTree();
@@ -189,14 +193,15 @@ int Huffman::encoding(char* in_path, char* out_path) {
 	this->countNode();
 
 	//Neu co 1 node thi giai thuat nen theo RLE va tra ve -1
-	if (this->n_Node == 1) {
-		if (runLengthEncoding(in_path, out_path)) {
-			this->typeEncode = 'r';		//Nen theo kieu RLE
-			return -1;
+	if (type == 0)
+		if (this->n_Node == 1) {
+			if (runLengthEncoding(in_path, out_path)) {
+				this->typeEncode = 'r';		//Nen theo kieu RLE
+				return -1;
+			}
+			//Khong thanh cong
+			return 0;
 		}
-		//Khong thanh cong
-		return 0;
-	}
 
 	//xay dung cay huffman
 	int pos_root = this->buildHuffmanTree();
@@ -206,7 +211,13 @@ int Huffman::encoding(char* in_path, char* out_path) {
 
 	//mo file de Ghi
 	FILE* outFile;
-	errno_t err = fopen_s(&outFile, out_path, "wb");
+	//nen file
+	if(type == 0)
+		errno_t err = fopen_s(&outFile, out_path, "wb");
+	//nen folder
+	else
+		errno_t err = fopen_s(&outFile, out_path, "ab");
+
 	if (!outFile) {
 		return 0;
 	}
@@ -230,14 +241,15 @@ int Huffman::encoding(char* in_path, char* out_path) {
 	char c;
 	while (1) {
 		fread(&c, sizeof(char), 1, inFile);
-
 		//ki tu ket thuc file
 		if (feof(inFile))
 			break;
+		int temp_c = c;
+		if (c < 0)
+			temp_c = (int)(c + 256);
+		for (int i = 0; i < this->bitCodeTable[temp_c].n_bit; ++i) {
 
-		for (int i = 0; i < this->bitCodeTable[c].n_bit; ++i) {
-
-			if (this->bitCodeTable[c].bits[i] == '1')
+			if (this->bitCodeTable[temp_c].bits[i] == '1')
 				out = out | (1 << pos_bit);	//shiftLeft bat bit 1 tai vi tri pos_bit
 
 			if (!pos_bit) {
@@ -258,7 +270,7 @@ int Huffman::encoding(char* in_path, char* out_path) {
 		fwrite(&out, sizeof(char), 1, outFile);
 
 	fclose(inFile);
-	fclose(inFile);
+	fclose(outFile);
 
 	//Thanh cong
 	return 1;
@@ -328,7 +340,7 @@ bool runLengthDecoding(char* in_path) {
 		nameFile[i] = in_path[i];
 		++count;
 	}
-	string s = FILE_NAME_EXTENSION_DECODE;
+	string s = "_decode.txt";
 	for (int i = 0; i < s.length(); ++i) {
 		nameFile[count + i] = s[i];
 	}
@@ -355,6 +367,8 @@ bool runLengthDecoding(char* in_path) {
 			out.write(&c, sizeof(char));
 		}
 	}
+
+	Free(nameFile);
 	in.close();
 	out.close();
 	return true;
@@ -383,7 +397,10 @@ bool Huffman::recreateHuffTree(FILE*& in) {
 	for (int i = 0; i < this->n_Node; i++) {
 		fread(&c, sizeof(char), 1, in);
 		fread(&freq, sizeof(int), 1, in);
-		huffTree[c].freq = freq;
+		if (c < 0)
+			huffTree[(int)(c + 256)].freq = freq;
+		else
+			huffTree[c].freq = freq;
 	}
 
 	return true;
@@ -412,7 +429,7 @@ bool Huffman::decoding(char* in_path, char* out_path) {
 	this->createBitCodetable(pos_root);
 
 	//So chu trong file de tranh bi du bit
-	int n_Char = 0;
+	double n_Char = 0;
 	for (int i = 0; i < 256; i++) {
 		if (huffTree[i].freq > 0)
 			n_Char += huffTree[i].freq;
@@ -422,7 +439,7 @@ bool Huffman::decoding(char* in_path, char* out_path) {
 	int pos_current = pos_root;
 
 	//so ky tu hien tai
-	int countChar = 0;
+	double countChar = 0;
 
 	//ky tu hien tai
 	char c;
@@ -435,6 +452,8 @@ bool Huffman::decoding(char* in_path, char* out_path) {
 	}
 	while (1) {
 		fread(&c, sizeof(char), 1, in);
+		if (feof(in))
+			break;
 		for (int i = 7; i >= 0; --i) {
 			int getBit_i = (c >> i) & 1;						//lay bit thu i cua ky tu c
 
@@ -461,8 +480,7 @@ bool Huffman::decoding(char* in_path, char* out_path) {
 				pos_current = pos_root;
 			}
 		}
-		if (feof(in))
-			break;
+		
 	}
 
 	fclose(in);
@@ -470,11 +488,85 @@ bool Huffman::decoding(char* in_path, char* out_path) {
 	return true;
 }
 
-Huffman::~Huffman() {
-	for (int i = 0; i < 256; i++){
-		if (this->bitCodeTable[i].bits != NULL) {
-			delete[] this->bitCodeTable[i].bits;
-			this->bitCodeTable[i].bits = NULL;
+bool Huffman::decodingFolder(FILE*& in, char* out_path) {
+
+	//mo file doc
+	if (!in) {
+		return 0;
+	}
+
+	//tai tao lai cay huffman
+	this->recreateHuffTree(in);
+
+	int pos_root = this->buildHuffmanTree();
+
+	this->countNode();
+
+	//tao lai bang bitcode
+	this->createBitCodetable(pos_root);
+
+	//So chu trong file de tranh bi du bit
+	double n_Char = 0;
+	for (int i = 0; i < 256; i++) {
+		if (huffTree[i].freq > 0)
+			n_Char += huffTree[i].freq;
+	}
+
+	//vi tri hien hanh tren cay huffman
+	int pos_current = pos_root;
+
+	//so ky tu hien tai
+	double countChar = 0;
+
+	//ky tu hien tai
+	char c;
+
+	//mo file de ghi
+	FILE* out;
+	errno_t err_2 = fopen_s(&out, out_path, "wb");
+	if (!out) {
+		return 0;
+	}
+	while (1) {
+		fread(&c, sizeof(char), 1, in);
+		if (feof(in))
+			break;
+		for (int i = 7; i >= 0; --i) {
+			int getBit_i = (c >> i) & 1;						//lay bit thu i cua ky tu c
+
+			if (getBit_i == 1)
+				pos_current = huffTree[pos_current].right;		//di qua phai
+			else
+				pos_current = huffTree[pos_current].left;		//di qua trai
+
+			//Tim den node la chua ky tu
+			if (huffTree[pos_current].left == -1 && huffTree[pos_current].right == -1) {
+				fwrite(&huffTree[pos_current].c, sizeof(char), 1, out);
+
+				//tang so ky tu hien tai
+				++countChar;
+
+				//da du so ky tu
+				if (countChar == n_Char) {
+					fclose(out);
+					return true;
+				}
+
+				//tro ve goc cua cay huffman
+				pos_current = pos_root;
+			}
 		}
+
+	}
+
+	fclose(out);
+	return true;
+}
+
+// ========================== CAC HAM PHU HO TRO ========================== //
+void Free(char* &s) {
+	if (s != NULL) {
+		delete[] s;
+		s = NULL;
 	}
 }

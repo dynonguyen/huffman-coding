@@ -1,9 +1,9 @@
 #pragma once
 #include "display.h"
 const string FILE_NAME_EXTENSION_ENCODE = ".winzip";
-const string FILE_NAME_EXTENSION_DECODE_TEXT = "_decode.txt";
+const string FILE_NAME_EXTENSION_DECODE = "_decode";
 
-//==================== CAC HAM HO TRO NEN-GIAI NEN FILE TXT ====================//
+//==================== CAC HAM HO TRO NEN-GIAI NEN FILE ====================//
 
 //ham chuyen chuoi string sang char*
 char* stringToCharArray(string);
@@ -12,15 +12,18 @@ char* stringToCharArray(string);
 string changeFileExtension(string, string);
 
 //tim duong dan cu the [path(file out) + namefile(file in)]
-void setOutputPath(string, string&);
+void setOutputPath(string, string&, string);
 
-// ======================= CAC HAM HO TRO NEN-GIAI NEN FOLDER TXT ====================== //
+//ham char* sang string
+string charArrayToString(char*);
+
+// ======================= CAC HAM HO TRO NEN-GIAI NEN FOLDER ====================== //
 
 //ham kiem tra 1 duong path co dan den 1 folder
 bool isFolder(string);
 
 //ham kiem tra 1 path la file hay folder
-bool isFileTxt(string );
+bool isFile(string );
 
 //ham tao 1 folder moi
 int newFolder(string);
@@ -28,11 +31,11 @@ int newFolder(string);
 // chay qua tung folder luu lai path (folder chua no)
 vector<string> saveDirectoryStructure(string);
 
-//ham lay duong dan folder chua file txt (vd: C:\folder\in.txt => C:\folder)
+//ham lay duong dan folder chua file (vd: C:\folder\in.txt => C:\folder)
 string getFolderPath(string);
 
-// ================================== NEN FILE TEXT =================================== //
-int compressFileText();
+// ================================== NEN FILE =================================== //
+int compressFile();
 
-// =========================== NEN 1 FOLDER CHUA FILE TEXT =========================== //
-int compressFolderTxt();
+// =========================== NEN 1 FOLDER CHUA FILE =========================== //
+int compressFolder();

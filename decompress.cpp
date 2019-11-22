@@ -1,15 +1,25 @@
 #include "decompress.h"
 
-// ================== GIAI NEN FILE TEXT ================== //
-int extractHereFileText() {
+// ================== GIAI NEN FILE ================== //
+int extractHereFile() {
 	//file dau vao
 	cout << ">> Enter the compression file path (EX: C:\\filename.winzip): ";
 	string in;
 	getline(cin, in);
 	char* in_path = stringToCharArray(in);
 
+	//nhap phan mo rong file
+	string ex;
+	do{
+		gotoxy(2, 6);
+		cout << ">> Enter the file name extension (EX: .exe or .h or .txt): ";
+		cin >> ex;
+		if (ex.find(".") != string::npos)
+			break;
+	} while (1);
+	
 	//file dau ra
-	string out = changeFileExtension(in, FILE_NAME_EXTENSION_DECODE_TEXT);
+	string out = changeFileExtension(in, FILE_NAME_EXTENSION_DECODE + ex);
 	char* out_path = stringToCharArray(out);
 
 	//Giai file
@@ -21,7 +31,7 @@ int extractHereFileText() {
 	return check;
 }
 
-int extractFileText() {
+int extractFile() {
 	//file dau vao				
 	cout << ">> Enter the compression file path (EX: C:\\filename.winzip): ";
 	string in;
@@ -32,7 +42,18 @@ int extractFileText() {
 	cout << ">> Enter the path to the extracted folder (EX: C:\\FoderName): ";
 	string out;
 	getline(cin, out);
-	setOutputPath(in, out);
+	string ex;
+
+	do {
+		gotoxy(2, 8);
+		cout << ">> Enter the file name extension (EX: .exe or .h or .txt): ";
+		cin >> ex;
+		if (ex.find(".") != string::npos)
+			break;
+	} while (1);
+
+	setOutputPath(in, out, ex);
+
 	char* out_path = stringToCharArray(out);
 	//Giai nen file
 	Huffman huff;
@@ -43,14 +64,25 @@ int extractFileText() {
 	return check;
 }
 
-// ================= GIAI NEN FOLDER TEXT ================ //
-int decompressFolderTxt() {
+// ================= GIAI NEN FOLDER ================ //
+int decompressFolder() {
 	//duong dan den file can giai nen
 	cout << ">> Enter the compression file path [C:\\filename.winzip]: ";
 	string in;
 	getline(cin, in);
 	if (isFolder(in))
 		return 0;
+
+	//lay ten cua folder
+	string t = "";
+	for (int i = in.find(FILE_NAME_EXTENSION_ENCODE) - 1; i >= 0; --i) {
+		if (in[i] == '/' || in[i] == '\\')
+			break;
+		t += in[i];
+	}
+	string nameFolder = "";
+	for (int i = t.length() - 1; i >= 0; --i)
+		nameFolder += t[i];
 
 	char* in_path = stringToCharArray(in);
 	//lay ten filename de tao duong dan moi
@@ -84,8 +116,9 @@ int decompressFolderTxt() {
 		path[i] = new char[MAX_CHAR];
 		fgets(path[i], MAX_CHAR, inFile);
 
-		filePath[i] = outFolder;
-		for (int j = 2; j < strlen(path[i]) - 1; ++j)
+		filePath[i] = outFolder + "\\";
+		string temp = charArrayToString(path[i]);
+		for (int j = temp.find(nameFolder); j < strlen(path[i]) - 1; ++j)
 			filePath[i] += path[i][j];
 
 		delete[] path[i];
@@ -94,7 +127,7 @@ int decompressFolderTxt() {
 	//tao cac folder
 	for (int i = 0; i < n; ++i) {
 		if (isFolder(filePath[i])) {
-			for (int j = 3; j < filePath[i].size(); ++j) {
+			for (int j = filePath[i].find(nameFolder); j < filePath[i].size(); ++j) {
 				if (filePath[i][j] == '\\' || filePath[i][j] == '/')
 					newFolder(filePath[i].substr(0, j));
 				if (j == filePath[i].size() - 1)
@@ -103,7 +136,7 @@ int decompressFolderTxt() {
 		}
 		else {
 			string temp = getFolderPath(filePath[i]);
-			for (int j = 3; j < temp.size(); ++j) {
+			for (int j = temp.find(nameFolder); j < temp.size(); ++j) {
 				if (temp[j] == '\\' || temp[j] == '/')
 					newFolder(temp.substr(0, j));
 				if (j == temp.size() - 1)

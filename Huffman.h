@@ -22,17 +22,16 @@
 #include <vector>
 #include <cmath>
 #include <fstream>
+#include <cstdlib>
 #include <Windows.h>
 #include <conio.h>
 #include <ctime>
 #include <sys/stat.h>
 #include <direct.h>
 #include <filesystem>
-
+#include <string.h>
+#pragma comment(lib, "User32.lib")
 using namespace std;
-
-const string FILE_NAME_EXTENSION_ENCODE = ".winzip";
-const string FILE_NAME_EXTENSION_DECODE = "_decode.txt";
 
 #define MAX_NODE 511		//cay nhi phan nen co 2n - 1 node (ma ASCII co 256 = n)
 #define MAX_BIT_CODE 2048   //so bit toi da cua mang bitCode[]
@@ -77,16 +76,18 @@ public:
 
 	bool saveFreqStatisTable(FILE*&);				//Ghi ban thong ke tan so vao file nen
 
-	int encoding(char*, char*);						//ma hoa du lieu va nen file
+	int encoding(char*, char*, int);				//ma hoa du lieu va nen file
 
 	bool recreateHuffTree(FILE*&);					//Ham tao lai cay huffman
 
-	bool decoding(char*, char*);					//Ham giai nen
+	bool decoding(char*, char*);					//Ham giai nen 1 file
 
-	~Huffman();
+	bool decodingFolder(FILE*&, char*);				//Ham giai nen 1 file
 };
 
 /* ========================== Thuat toan nen RLE =========================== */
 bool runLengthEncoding(char*, char*);				//Nen file
 bool runLengthDecoding(char*);						//giai nen
 
+// ========================== CAC HAM PHU HO TRO ========================== //
+void Free(char* &);
