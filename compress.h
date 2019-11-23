@@ -4,6 +4,7 @@ const string FILE_NAME_EXTENSION_ENCODE = ".winzip";
 const string FILE_NAME_EXTENSION_DECODE = "_decode";
 
 //==================== CAC HAM HO TRO NEN-GIAI NEN FILE ====================//
+float getSize(string);
 
 //ham chuyen chuoi string sang char*
 char* stringToCharArray(string);
@@ -35,7 +36,7 @@ vector<string> saveDirectoryStructure(string);
 string getFolderPath(string);
 
 // ================================== NEN FILE =================================== //
-int compressFile();
+int compressFile(float []);
 
 // =========================== NEN 1 FOLDER CHUA FILE =========================== //
-int compressFolder();
+int compressFolder(float []);

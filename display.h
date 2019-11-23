@@ -3,10 +3,14 @@
 #include "compress.h"
 #include "decompress.h"
 
-#define TEXT_COLOR_PROGRAM_NAME 10
-#define TEXT_COLOR_CURSOR 14
-#define TEXT_COLOR_TITLE 6
+#define TEXT_COLOR_PROGRAM_NAME 9
+#define TEXT_COLOR_TITLE 10
 #define TEXT_COLOR_EXIT 4
+#define TEXT_COLOR_CURSOR 6
+#define TEXT_COLOR_INFO 13
+#define TEXT_COLOR_ERROR 12
+#define TEXT_COLOR_NO_ERROR 11
+#define TEXT_COLOR 7
 #define MAX_OPTION 4
 
 //ham dua con tro den vi tri x, y
@@ -25,7 +29,7 @@ void displayCursor(int, int);
 void menu();
 
 //ham thong bao loi hay khong
-void errorsMessage(int, int, int);
+void errorsMessage(int, int, int, int);
 
 
 //rut gon cac ham su dung lai nhieu

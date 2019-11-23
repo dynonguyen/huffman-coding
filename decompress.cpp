@@ -1,13 +1,13 @@
 #include "decompress.h"
 
 // ================== GIAI NEN FILE ================== //
-int extractHereFile() {
+int extractHereFile(float info[]) {
 	//file dau vao
 	cout << ">> Enter the compression file path (EX: C:\\filename.winzip): ";
 	string in;
 	getline(cin, in);
+	
 	char* in_path = stringToCharArray(in);
-
 	//nhap phan mo rong file
 	string ex;
 	do{
@@ -22,16 +22,23 @@ int extractHereFile() {
 	string out = changeFileExtension(in, FILE_NAME_EXTENSION_DECODE + ex);
 	char* out_path = stringToCharArray(out);
 
+	//thoi gian chay
+	clock_t start = clock();
+
 	//Giai file
 	Huffman huff;
 	int check = huff.decoding(in_path, out_path);
 
 	Free(in_path);
 	Free(out_path);
+
+	info[0] = (double)(clock() - start) / CLOCKS_PER_SEC;
+	info[2] = getSize(out);
+	info[1] = getSize(out);
 	return check;
 }
 
-int extractFile() {
+int extractFile(float info[]) {
 	//file dau vao				
 	cout << ">> Enter the compression file path (EX: C:\\filename.winzip): ";
 	string in;
@@ -46,12 +53,13 @@ int extractFile() {
 
 	do {
 		gotoxy(2, 8);
-		cout << ">> Enter the file name extension (EX: .exe or .h or .txt): ";
+		cout << ">> Enter the file name extension (EX: .exe, .h, .txt, .mp4): ";
 		cin >> ex;
 		if (ex.find(".") != string::npos)
 			break;
 	} while (1);
 
+	clock_t start = clock();
 	setOutputPath(in, out, ex);
 
 	char* out_path = stringToCharArray(out);
@@ -61,11 +69,15 @@ int extractFile() {
 
 	Free(in_path);
 	Free(out_path);
+
+	info[0] = (double)(clock() - start) / CLOCKS_PER_SEC;
+	info[2] = getSize(out);
+	info[1] = getSize(out);
 	return check;
 }
 
 // ================= GIAI NEN FOLDER ================ //
-int decompressFolder() {
+int decompressFolder(float info[]) {
 	//duong dan den file can giai nen
 	cout << ">> Enter the compression file path [C:\\filename.winzip]: ";
 	string in;
@@ -73,6 +85,7 @@ int decompressFolder() {
 	if (isFolder(in))
 		return 0;
 
+	clock_t start = clock();
 	//lay ten cua folder
 	string t = "";
 	for (int i = in.find(FILE_NAME_EXTENSION_ENCODE) - 1; i >= 0; --i) {
@@ -157,5 +170,6 @@ int decompressFolder() {
 		}
 	}
 	fclose(inFile);
+	info[0] = (double)(clock() - start) / CLOCKS_PER_SEC;
 	return 1;
 }

@@ -4,10 +4,10 @@
 // ================== GIAI NEN FILE ================== //
 
 //ham giai nen file tai path goc
-int extractHereFile();
+int extractHereFile(float []);
 
 //ham giai nen file den 1 duong path khac
-int extractFile();
+int extractFile(float []);
 
 // ================= GIAI NEN FOLDER ================ //
-int decompressFolder();
+int decompressFolder(float []);

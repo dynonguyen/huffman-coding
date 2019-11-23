@@ -1,6 +1,17 @@
 #include "compress.h"
 
 // ======================= CAC HAM HO TRO NEN-GIAI NEN ======================= //
+float getSize(string path) {
+	float res = 0;
+	ifstream in_size(path);
+	if (!in_size.fail()) {
+		in_size.seekg(0, ios::end);
+		res = in_size.tellg();
+		in_size.close();
+	}
+	return res;
+}
+
 char* stringToCharArray(string str) {
 	char* res = new char[str.size() + 1];
 	for (int i = 0; i < str.size(); i++) {
@@ -46,14 +57,16 @@ string charArrayToString(char* s) {
 }
 
 // ============================== NEN FILE ================================== //
-int compressFile() {
+int compressFile(float info[]) {
 	cout << ">> Enter the original file path (EX: C:\\filename.txt): ";
 	string in;
 	getline(cin, in);
 	if (!isFile(in))
 		return 0;
-	char* in_path = stringToCharArray(in);
+	//tinh thoi gian thuc thi chuong trinh
+	clock_t start = clock();
 
+	char* in_path = stringToCharArray(in);
 	//file dau ra
 	string out = changeFileExtension(in, FILE_NAME_EXTENSION_ENCODE);
 	char* out_path = stringToCharArray(out);
@@ -61,9 +74,15 @@ int compressFile() {
 	//nen file
 	Huffman huff;
 	int check = huff.encoding(in_path, out_path, 0);
-
+	
+	//giai phong vung nho
 	Free(in_path);
 	Free(out_path);
+
+	//luu cac thong tin file
+	info[0] = (double)1.0 * (clock() - start) / CLOCKS_PER_SEC;
+	info[1] = getSize(in);
+	info[2] = getSize(out);
 	return check;
 }
 
@@ -121,7 +140,7 @@ vector<string> saveDirectoryStructure(string path) {
 	//doc file data.txt
 	ifstream input("data.txt");		
 	if (input.fail()) {
-		errorsMessage(0, 2, 6);
+		errorsMessage(0, 2, 6, 0);
 	}
 	string s;
 	getline(input, s);								//Bo qua dong trong dau tien trong file
@@ -151,13 +170,16 @@ vector<string> saveDirectoryStructure(string path) {
 
 // ======================= NEN 1 FOLDER CHUA FILE ======================== //
 
-int compressFolder() {
+int compressFolder(float info[]) {
 	cout << ">> Enter the directory path [C:\\foldername]: ";
 	string in;
 	getline(cin, in);
 	if (!isFolder(in))
 		return 0;
 	
+	//thoi gian chay chuong trinh
+	clock_t start = clock();
+
 	//luu lai cay thu muc
 	vector<string> path = saveDirectoryStructure(in);
 
@@ -185,5 +207,7 @@ int compressFolder() {
 		}
 	}
 	Free(out_path);
+
+	info[0] = (double)1.0 * (clock() - start) / CLOCKS_PER_SEC;
 	return 1;
 }

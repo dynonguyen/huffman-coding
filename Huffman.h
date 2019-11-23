@@ -3,7 +3,7 @@
 
 	Nguyen nhan lua chon:
 	-Thuat toan de cai dat
-	-He so nen tuong doi cao
+	-He so nen tuong doi cao file text
 	-Can it bo nho
 
 	Tuy nhien:
@@ -30,6 +30,8 @@
 #include <direct.h>
 #include <filesystem>
 #include <string.h>
+#include <iomanip>
+
 #pragma comment(lib, "User32.lib")
 using namespace std;
 
