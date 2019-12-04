@@ -59,10 +59,9 @@ int extractFile(float info[]) {
 			break;
 	} while (1);
 
-	clock_t start = clock();
 	setOutputPath(in, out, ex);
-
 	char* out_path = stringToCharArray(out);
+	clock_t start = clock();
 	//Giai nen file
 	Huffman huff;
 	int check = huff.decoding(in_path, out_path);
@@ -84,8 +83,6 @@ int decompressFolder(float info[]) {
 	getline(cin, in);
 	if (isFolder(in))
 		return 0;
-
-	clock_t start = clock();
 	//lay ten cua folder
 	string t = "";
 	for (int i = in.find(FILE_NAME_EXTENSION_ENCODE) - 1; i >= 0; --i) {
@@ -158,6 +155,7 @@ int decompressFolder(float info[]) {
 		}
 	}
 
+	clock_t start = clock();
 	//tien hanh giai nen
 	for (int i = 0; i < n; ++i){
 		if (!isFolder(filePath[i])) {

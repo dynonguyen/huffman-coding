@@ -1,7 +1,7 @@
 #include "compress.h"
 
 // ======================= CAC HAM HO TRO NEN-GIAI NEN ======================= //
-float getSize(string path) {
+float getSize(const string& path) {
 	float res = 0;
 	ifstream in_size(path);
 	if (!in_size.fail()) {
@@ -12,7 +12,7 @@ float getSize(string path) {
 	return res;
 }
 
-char* stringToCharArray(string str) {
+char* stringToCharArray(const string& str) {
 	char* res = new char[str.size() + 1];
 	for (int i = 0; i < str.size(); i++) {
 		res[i] = str[i];
@@ -21,7 +21,7 @@ char* stringToCharArray(string str) {
 	return res;
 }
 
-string changeFileExtension(string str, string fileName_Ex) {
+string changeFileExtension(const string& str, const string& fileName_Ex) {
 	string res = "";
 	for (int i = 0; i < str.length(); ++i) {
 		if (str[i] == '.')
@@ -32,7 +32,7 @@ string changeFileExtension(string str, string fileName_Ex) {
 	return res;
 }
 
-void setOutputPath(string in_path, string& out, string extension) {
+void setOutputPath(const string& in_path, string& out, const string& extension) {
 	string out_path = "";
 	out += "\\";
 	for (int i = in_path.length() - FILE_NAME_EXTENSION_ENCODE.size() - 1; i >= 0; --i) {
@@ -63,13 +63,14 @@ int compressFile(float info[]) {
 	getline(cin, in);
 	if (!isFile(in))
 		return 0;
-	//tinh thoi gian thuc thi chuong trinh
-	clock_t start = clock();
-
+	
 	char* in_path = stringToCharArray(in);
 	//file dau ra
 	string out = changeFileExtension(in, FILE_NAME_EXTENSION_ENCODE);
 	char* out_path = stringToCharArray(out);
+
+	//tinh thoi gian thuc thi chuong trinh
+	clock_t start = clock();
 
 	//nen file
 	Huffman huff;
@@ -87,20 +88,20 @@ int compressFile(float info[]) {
 }
 
 // ==================== CAC HAM HO TRO NEN-GIAI NEN FOLDER =================== //
-bool isFolder(string path) {
+bool isFolder(const string& path) {
 	if (path.find(".") == string::npos)
 		return true;
 
 	return false;
 }
 
-bool isFile(string path) {
+bool isFile(const string& path) {
 	if (path.find(".") != string::npos)
 		return true;
 	return false;
 }
 
-int newFolder(string path) {
+int newFolder(const string& path) {
 	if (!isFolder(path))
 		return 1;
 	char* path_t = stringToCharArray(path);
@@ -109,7 +110,7 @@ int newFolder(string path) {
 	return result;
 }
 
-string getFolderPath(string path) {
+string getFolderPath(const string& path) {
 	int pos_i = 0;
 	for(int i = path.size() - 1; i >= 0; --i)
 		if (path[i] == '/' || path[i] == '\\') {
@@ -123,7 +124,7 @@ string getFolderPath(string path) {
 	return result;
 }
 
-vector<string> saveDirectoryStructure(string path) {
+vector<string> saveDirectoryStructure(const string& path) {
 	static vector<string> result;
 	vector<string> folder;
 
@@ -176,9 +177,6 @@ int compressFolder(float info[]) {
 	getline(cin, in);
 	if (!isFolder(in))
 		return 0;
-	
-	//thoi gian chay chuong trinh
-	clock_t start = clock();
 
 	//luu lai cay thu muc
 	vector<string> path = saveDirectoryStructure(in);
@@ -194,6 +192,9 @@ int compressFolder(float info[]) {
 		output << path[i] << endl;
 	}
 	output.close();
+
+	//thoi gian chay chuong trinh
+	clock_t start = clock();
 
 	for (int i = 0; i < path.size(); ++i){
 		if (isFile(path[i])) {
