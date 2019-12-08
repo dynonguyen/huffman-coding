@@ -37,7 +37,7 @@ using namespace std;
 
 #define MAX_NODE 511		//cay nhi phan nen co 2n - 1 node (ma ASCII co 256 = n)
 #define MAX_BIT_CODE 2048   //so bit toi da cua mang bitCode[]
-
+#define MAX_CHAR 30000
 /* ==================== cau truc 1 node cua cay huffman ==================== */
 struct Node {
 	char c;				  //ky tu
