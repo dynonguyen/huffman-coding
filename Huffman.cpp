@@ -241,6 +241,7 @@ int Huffman::encoding(char* in_path, char* out_path,int type) {
 	char c[MAX_BUFF];
 	while (1) {
 		int n = fread(&c, sizeof(char), MAX_BUFF, inFile);
+		
 		for (int i = 0; i < n; ++i) {
 			int temp_c = c[i];
 			if (c[i] < 0)
@@ -249,7 +250,6 @@ int Huffman::encoding(char* in_path, char* out_path,int type) {
 
 				if (this->bitCodeTable[temp_c].bits[i] == '1')
 					out = out | (1 << pos_bit);	//shiftLeft bat bit 1 tai vi tri pos_bit
-
 				if (!pos_bit) {
 					fwrite(&out, sizeof(char), 1, outFile);
 					out = 0;
@@ -263,6 +263,7 @@ int Huffman::encoding(char* in_path, char* out_path,int type) {
 		if (feof(inFile))
 			break;
 	}
+
 
 	//Xu ly truong hop byte cuoi cua ky tu out chua du 8 bit
 	int n_BitFinal = 7 - pos_bit;		//so bit cua ky tu out o byte cuoi

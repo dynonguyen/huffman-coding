@@ -56,13 +56,24 @@ string charArrayToString(char* s) {
 	return res;
 }
 
+bool isCompressionFile(const string& path) {
+	if (path.find(FILE_NAME_EXTENSION_ENCODE) != string::npos)
+		return true;
+	if(path.find(".zip") != string::npos)
+		return true;
+	if (path.find(".rar") != string::npos)
+		return true;
+	return false;
+}
+
 // ============================== NEN FILE ================================== //
 void compressFile() {
 	cout << ">> Enter the original file path (EX: C:\\filename.txt): ";
 	string in;
 	getline(cin, in);
-	if (!isFile(in))
-		throw "Fail to read file";
+	if (!isFile(in) || isCompressionFile(in))
+		throw "Not File (The file has been compressed)";
+
 	char* in_path = stringToCharArray(in);
 	static int in_size = getSize(in_path);
 
@@ -203,6 +214,8 @@ void compressFolder() {
 	for (int i = 0; i < path.size(); ++i){
 		if (isFile(path[i])) {
 			char* com_path = stringToCharArray(path[i]);
+			if (isCompressionFile(com_path))
+				throw "There is an already compressed file";
 			//tien hanh nen
 			int check = huff.encoding(com_path, out_path, 1);
 			if (check == 0) {
