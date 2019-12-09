@@ -1,6 +1,12 @@
 /*
-	Su dung thuat toan nen file khong mat du lieu (lossless compression) Static Huffman
+	=========== DO AN NEN FILE MON CTDL&GT - HCMUS K18 - 18CTT5/C ===========
+	//Nhom thuc hien:
+	18120634 - Nguyen Le Anh Tuan
+	18120644 - Nguyen Cat Tuong
 
+	// ====== GIOI THIEU VE THUAT TOAN NEN ======= //
+
+	Su dung thuat toan nen file khong mat du lieu (lossless compression) Static Huffman
 	Nguyen nhan lua chon:
 	-Thuat toan de cai dat
 	-He so nen tuong doi cao file text
@@ -11,12 +17,19 @@
 	-Luu thong tin khi de giai nen
 	-Tao lai cay huffman khi giai nen
 	=> Doi voi file dung luong rat thap thi se co xay ra truong hop dung luong nen > dung luong thuc
+	=> Khong nen tot voi nhung file da nen nhu mp3, mp4, jpg, ....
 
 	P/s: Trong truong hop file chi co 1 loai ky tu duy nhat thi bai toan se duoc giai quyet bang
 		 thuat toan RLE (Run Length Encoding)
+
+	//Project duoc cap nhat, sua chua tai: https://github.com/TuanNguyen2504/compress-static-huffman.git
+
 */
 
 #pragma once
+#ifndef _HUFFMAN_
+#define _HUFFMAN_
+
 #include <iostream>
 #include <string>
 #include <vector>
@@ -37,7 +50,7 @@ using namespace std;
 
 #define MAX_NODE 511		//cay nhi phan nen co 2n - 1 node (ma ASCII co 256 = n)
 #define MAX_BIT_CODE 2048   //so bit toi da cua mang bitCode[]
-#define MAX_CHAR 30000
+#define MAX_BUFF 65536		//so luong luu tru toi da buffer khi doc file
 /* ==================== cau truc 1 node cua cay huffman ==================== */
 struct Node {
 	char c;				  //ky tu
@@ -55,7 +68,17 @@ struct bitCode {
 
 /* ===================== Lop thuat toan cua nen hufman ===================== */
 class Huffman {
+private:
+	//luu thoi gian chay
+	clock_t _time;
 public:
+	void setTime(const clock_t& time) {
+		_time = time;
+	};
+	clock_t& getTime() {
+		return _time;
+	}
+
 	Node huffTree[MAX_NODE];						//cay huffman duoi dang array
 	int n_Node = 0;									//so node co tan so > 0 (dung de giai nen sau nay)
 	char typeEncode = 'h';							//loai nen neu co 1 ky tu thi nen theo RLE se tot hon
@@ -91,5 +114,4 @@ public:
 bool runLengthEncoding(char*, char*);				//Nen file
 bool runLengthDecoding(char*);						//giai nen
 
-// ========================== CAC HAM PHU HO TRO ========================== //
-void Free(char* &);
+#endif 

@@ -20,9 +20,9 @@ void Huffman::freqStatistics(char* path) {
 		return;
 	}
 
-	char c[MAX_CHAR];
+	char c[MAX_BUFF];
 	while (1) {
-		int n = fread(&c, sizeof(char), MAX_CHAR, in);
+		int n = fread(&c, sizeof(char), MAX_BUFF, in);
 		for (int i = 0; i < n; ++i) {
 			if (c[i] < 0)
 				this->huffTree[(int)(c[i] + 256)].freq++;
@@ -183,7 +183,6 @@ bool Huffman::saveFreqStatisTable(FILE*& outFile) {
 }
 
 int Huffman::encoding(char* in_path, char* out_path,int type) {
-
 	//tao cay huffman
 	this->initHuffTree();
 
@@ -239,9 +238,9 @@ int Huffman::encoding(char* in_path, char* out_path,int type) {
 		return 0;
 	}
 
-	char c[MAX_CHAR];
+	char c[MAX_BUFF];
 	while (1) {
-		int n = fread(&c, sizeof(char), MAX_CHAR, inFile);
+		int n = fread(&c, sizeof(char), MAX_BUFF, inFile);
 		for (int i = 0; i < n; ++i) {
 			int temp_c = c[i];
 			if (c[i] < 0)
@@ -371,7 +370,6 @@ bool runLengthDecoding(char* in_path) {
 		}
 	}
 
-	Free(nameFile);
 	in.close();
 	out.close();
 	return true;
@@ -445,7 +443,7 @@ bool Huffman::decoding(char* in_path, char* out_path) {
 	double countChar = 0;
 
 	//ky tu hien tai
-	char c[MAX_CHAR];
+	char c[MAX_BUFF];
 
 	//mo file de ghi
 	FILE* out;
@@ -455,7 +453,7 @@ bool Huffman::decoding(char* in_path, char* out_path) {
 	}
 
 	while (1) {
-		int count = fread(&c, sizeof(char), 1, in);
+		int count = fread(&c, sizeof(char), MAX_BUFF, in);
 		for (int k = 0; k < count; ++k) {
 			for (int i = 7; i >= 0; --i) {
 				int getBit_i = (c[k] >> i) & 1;						//lay bit thu i cua ky tu c
@@ -566,12 +564,4 @@ bool Huffman::decodingFolder(FILE*& in, char* out_path) {
 
 	fclose(out);
 	return true;
-}
-
-// ========================== CAC HAM PHU HO TRO ========================== //
-void Free(char* &s) {
-	if (s != NULL) {
-		delete[] s;
-		s = NULL;
-	}
 }

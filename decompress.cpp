@@ -1,7 +1,7 @@
 #include "decompress.h"
 
 // ================== GIAI NEN FILE ================== //
-int extractHereFile(float info[]) {
+void extractHereFile() {
 	//file dau vao
 	cout << ">> Enter the compression file path (EX: C:\\filename.winzip): ";
 	string in;
@@ -12,7 +12,7 @@ int extractHereFile(float info[]) {
 	string ex;
 	do{
 		gotoxy(2, 6);
-		cout << ">> Enter the file name extension (EX: .exe or .h or .txt): ";
+		cout << ">> Enter the file name extension (EX: .exe or .mp3 or .txt): ";
 		cin >> ex;
 		if (ex.find(".") != string::npos)
 			break;
@@ -22,23 +22,21 @@ int extractHereFile(float info[]) {
 	string out = changeFileExtension(in, FILE_NAME_EXTENSION_DECODE + ex);
 	char* out_path = stringToCharArray(out);
 
-	//thoi gian chay
-	clock_t start = clock();
-
 	//Giai file
 	Huffman huff;
+	huff.setTime(clock());
+	gotoxy(2, 8);
+	SetColor(10);
+	cout << "Decompressing ... Please wait a few seconds :\">";
 	int check = huff.decoding(in_path, out_path);
-
-	Free(in_path);
-	Free(out_path);
-
-	info[0] = (double)(clock() - start) / CLOCKS_PER_SEC;
-	info[2] = getSize(out);
-	info[1] = getSize(out);
-	return check;
+	//ket qua
+	gotoxy(2, 10);
+	SetColor(TEXT_COLOR_INFO);
+	printf("-----> Program execution time:: %.3f (s)", (double)1.0 * (clock() - huff.getTime()) / CLOCKS_PER_SEC);
+	errorsMessage(check, 2, 10);
 }
 
-int extractFile(float info[]) {
+void extractFile() {
 	//file dau vao				
 	cout << ">> Enter the compression file path (EX: C:\\filename.winzip): ";
 	string in;
@@ -61,28 +59,28 @@ int extractFile(float info[]) {
 
 	setOutputPath(in, out, ex);
 	char* out_path = stringToCharArray(out);
-	clock_t start = clock();
-	//Giai nen file
+	//Giai file
 	Huffman huff;
+	huff.setTime(clock());
+	gotoxy(2, 10);
+	SetColor(10);
+	cout << "Decompressing ... Please wait a few seconds :\">";
 	int check = huff.decoding(in_path, out_path);
-
-	Free(in_path);
-	Free(out_path);
-
-	info[0] = (double)(clock() - start) / CLOCKS_PER_SEC;
-	info[2] = getSize(out);
-	info[1] = getSize(out);
-	return check;
+	//ket qua
+	gotoxy(2, 12);
+	SetColor(TEXT_COLOR_INFO);
+	printf("-----> Program execution time:: %.3f (s)", (double)1.0 * (clock() - huff.getTime()) / CLOCKS_PER_SEC);
+	errorsMessage(check, 2, 12);
 }
 
 // ================= GIAI NEN FOLDER ================ //
-int decompressFolder(float info[]) {
+void decompressFolder() {
 	//duong dan den file can giai nen
 	cout << ">> Enter the compression file path [C:\\filename.winzip]: ";
 	string in;
 	getline(cin, in);
 	if (isFolder(in))
-		return 0;
+		throw "Not Compression File";
 	//lay ten cua folder
 	string t = "";
 	for (int i = in.find(FILE_NAME_EXTENSION_ENCODE) - 1; i >= 0; --i) {
@@ -106,13 +104,13 @@ int decompressFolder(float info[]) {
 
 	//tao folder giai nen
 	if (newFolder(outFolder) == 1)
-		return 0;
+		throw "Fail to create folder";
 
 	//mo file ghi lai cac duong dan
 	FILE* inFile;
 	errno_t err = fopen_s(&inFile, in_path, "rb");
 	if (inFile == NULL)
-		return 0;
+		throw "Fail to read file";
 	int n;
 	fscanf_s(inFile, "%d", &n, 1);
 
@@ -155,19 +153,23 @@ int decompressFolder(float info[]) {
 		}
 	}
 
-	clock_t start = clock();
+	Huffman huff;
+	gotoxy(2, 6);
+	SetColor(10);
+	cout << "Decompressing ... Please wait a few seconds :\">";
+	huff.setTime(clock());
 	//tien hanh giai nen
 	for (int i = 0; i < n; ++i){
 		if (!isFolder(filePath[i])) {
 			char* t_path = stringToCharArray(filePath[i]);
-			Huffman huff;
 			int check = huff.decodingFolder(inFile, t_path);
-			Free(t_path);
 			if (check == 0)
-				return 0;
+				throw "decompression error";
 		}
 	}
+	gotoxy(2, 8);
+	SetColor(TEXT_COLOR_INFO);
+	printf("-----> Program execution time:: %.3f (s)", (double)1.0 * (clock() - huff.getTime()) / CLOCKS_PER_SEC);
 	fclose(inFile);
-	info[0] = (double)(clock() - start) / CLOCKS_PER_SEC;
-	return 1;
+	errorsMessage(1, 2, 8);
 }

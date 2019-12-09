@@ -1,4 +1,7 @@
 #pragma once
+#ifndef _DISPLAY_
+#define _DISPLAY_
+
 #include "Huffman.h"
 #include "compress.h"
 #include "decompress.h"
@@ -29,7 +32,7 @@ void displayCursor(int, int);
 void menu();
 
 //ham thong bao loi hay khong
-void errorsMessage(int, int, int, int);
+void errorsMessage(int, int, int);
 
 
 //rut gon cac ham su dung lai nhieu
@@ -38,3 +41,5 @@ void optimizeSetup_2();
 
 //ham main chinh chuong trinh
 void displayMain();
+
+#endif

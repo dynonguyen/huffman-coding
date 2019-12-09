@@ -1,4 +1,7 @@
 #pragma once
+#ifndef _COMPRESS_
+#define _COMPRESS_
+
 #include "display.h"
 const string FILE_NAME_EXTENSION_ENCODE = ".winzip";
 const string FILE_NAME_EXTENSION_DECODE = "_decode";
@@ -36,7 +39,9 @@ vector<string> saveDirectoryStructure(const string&);
 string getFolderPath(const string&);
 
 // ================================== NEN FILE =================================== //
-int compressFile(float []);
+void compressFile();
 
 // =========================== NEN 1 FOLDER CHUA FILE =========================== //
-int compressFolder(float []);
+void compressFolder();
+
+#endif

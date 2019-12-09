@@ -57,34 +57,38 @@ string charArrayToString(char* s) {
 }
 
 // ============================== NEN FILE ================================== //
-int compressFile(float info[]) {
+void compressFile() {
 	cout << ">> Enter the original file path (EX: C:\\filename.txt): ";
 	string in;
 	getline(cin, in);
 	if (!isFile(in))
-		return 0;
-	
+		throw "Fail to read file";
 	char* in_path = stringToCharArray(in);
+	static int in_size = getSize(in_path);
+
 	//file dau ra
 	string out = changeFileExtension(in, FILE_NAME_EXTENSION_ENCODE);
 	char* out_path = stringToCharArray(out);
-
-	//tinh thoi gian thuc thi chuong trinh
-	clock_t start = clock();
-
 	//nen file
 	Huffman huff;
+	huff.setTime(clock());
+	gotoxy(2, 6);
+	SetColor(10);
+	cout << "Compressing ... Please wait a few seconds :\">";
 	int check = huff.encoding(in_path, out_path, 0);
 	
-	//giai phong vung nho
-	Free(in_path);
-	Free(out_path);
-
-	//luu cac thong tin file
-	info[0] = (double)1.0 * (clock() - start) / CLOCKS_PER_SEC;
-	info[1] = getSize(in);
-	info[2] = getSize(out);
-	return check;
+	//ket qua
+	gotoxy(2, 8);
+	SetColor(TEXT_COLOR_INFO);
+	printf("-----> Program execution time:: %.3f (s)", (double)1.0 * (clock() - huff.getTime()) / CLOCKS_PER_SEC);
+	gotoxy(2, 9);
+	static int out_size = getSize(out_path);
+	printf("-----> Original file size: %.5f (MB)", (float)(1.0 * in_size) / (1024 * 1024));
+	gotoxy(2, 10);
+	printf("-----> Compression file size: %.5f (MB)", (float)(1.0 * out_size) / (1024 * 1024));
+	gotoxy(2, 11);
+	printf("-----> Compression ratio: %.5f %%", (float)(1 - (float)(1.0 * out_size / in_size)) * 100);
+	errorsMessage(check, 2, 11);
 }
 
 // ==================== CAC HAM HO TRO NEN-GIAI NEN FOLDER =================== //
@@ -106,7 +110,6 @@ int newFolder(const string& path) {
 		return 1;
 	char* path_t = stringToCharArray(path);
 	int result = _mkdir(path_t);
-	Free(path_t);
 	return result;
 }
 
@@ -141,7 +144,7 @@ vector<string> saveDirectoryStructure(const string& path) {
 	//doc file data.txt
 	ifstream input("data.txt");		
 	if (input.fail()) {
-		errorsMessage(0, 2, 6, 0);
+		errorsMessage(0, 2, 6);
 	}
 	string s;
 	getline(input, s);								//Bo qua dong trong dau tien trong file
@@ -165,25 +168,24 @@ vector<string> saveDirectoryStructure(const string& path) {
 	for (int i = 0; i < folder.size(); ++i)
 		saveDirectoryStructure(folder[i]);
 
-	Free(in_path);
 	return result;
 }
 
 // ======================= NEN 1 FOLDER CHUA FILE ======================== //
 
-int compressFolder(float info[]) {
+void compressFolder() {
 	cout << ">> Enter the directory path [C:\\foldername]: ";
 	string in;
 	getline(cin, in);
 	if (!isFolder(in))
-		return 0;
-
-	//luu lai cay thu muc
-	vector<string> path = saveDirectoryStructure(in);
+		throw "Fail to read file";
 
 	//tao duong dan file nen
 	string out = in + FILE_NAME_EXTENSION_ENCODE;
 	char* out_path = stringToCharArray(out);
+
+	//luu lai cay thu muc
+	vector<string> path = saveDirectoryStructure(in);
 
 	ofstream output(out_path, ios::binary | ios::app);
 	output << path.size();
@@ -193,22 +195,24 @@ int compressFolder(float info[]) {
 	}
 	output.close();
 
-	//thoi gian chay chuong trinh
-	clock_t start = clock();
-
+	Huffman huff;
+	gotoxy(2, 4);
+	SetColor(10);
+	cout << "Compressing ... Please wait a few seconds :\">";
+	huff.setTime(clock());
 	for (int i = 0; i < path.size(); ++i){
 		if (isFile(path[i])) {
 			char* com_path = stringToCharArray(path[i]);
 			//tien hanh nen
-			Huffman huff;
 			int check = huff.encoding(com_path, out_path, 1);
-			Free(com_path);
-			if (check == 0)
-				return 0;
+			if (check == 0) {
+				throw "It is possible that the name of a directory of yours exists a dot...\n\tResulting in indistinguishable files or directories.";
+				errorsMessage(0, 2, 6);
+			}
 		}
 	}
-	Free(out_path);
-
-	info[0] = (double)1.0 * (clock() - start) / CLOCKS_PER_SEC;
-	return 1;
+	gotoxy(2, 6);
+	SetColor(TEXT_COLOR_INFO);
+	printf("-----> Program execution time:: %.3f (s)", (double)1.0 * (clock() - huff.getTime()) / CLOCKS_PER_SEC);
+	errorsMessage(1, 2, 6);
 }

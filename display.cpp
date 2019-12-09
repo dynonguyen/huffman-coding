@@ -1,7 +1,5 @@
 #include "display.h"
 
-float info[3];
-
 void gotoxy(int x, int y)
 {
 	static HANDLE h = NULL;
@@ -80,7 +78,7 @@ void menu() {
 	cout << "<===== Press ESC key to exit =====>";
 }
 
-void errorsMessage(int check, int x, int y, int type) {
+void errorsMessage(int check, int x, int y) {
 	if (!check) {
 		gotoxy(x, y);
 		SetColor(TEXT_COLOR_ERROR);
@@ -90,38 +88,7 @@ void errorsMessage(int check, int x, int y, int type) {
 		cout << "<===== Press any key to exit =====>";
 
 	}
-	else if(type == 0){
-		gotoxy(0, y);
-		SetColor(TEXT_COLOR_INFO);
-		cout << "-----> Program execution time: " << info[0] << " (s)" << endl
-			<< "-----> Original file size: " << setprecision(15) << info[1] << " (byte)" << endl
-			<< "-----> Compression file size: " << info[2] << " (byte)" << endl
-			<< "-----> H: " << setprecision(5) << (1.0 - (1.0*info[2] / info[1]))*100.0 << "%";
-			
-		gotoxy(x, y + 5);
-		SetColor(TEXT_COLOR_NO_ERROR);
-		cout << "!============== NO ERROR ==============!";
-		SetColor(TEXT_COLOR_EXIT);
-		gotoxy(x, y + 7);
-		cout << "<===== Press any key to exit =====>";
-	}
-	else if (type == 1) {
-		gotoxy(0, y);
-		SetColor(TEXT_COLOR_INFO);
-		cout << "-----> Program execution time: " << info[0] << " (s)" << endl
-			<< "-----> Original file size: " << setprecision(15) << info[1] << " (byte)" << endl
-			<< "-----> Decompression file size: " << info[2] << " (byte)";
-		gotoxy(x, y + 4);
-		SetColor(TEXT_COLOR_NO_ERROR);
-		cout << "!============== NO ERROR ==============!";
-		SetColor(TEXT_COLOR_EXIT);
-		gotoxy(x, y + 6);
-		cout << "<===== Press any key to exit =====>";
-	}
-	else if (type == 2) {
-		gotoxy(0, y);
-		SetColor(TEXT_COLOR_INFO);
-		cout << "-----> Program execution time: " << info[0] << " (s)";
+	else {
 		gotoxy(x, y + 2);
 		SetColor(TEXT_COLOR_NO_ERROR);
 		cout << "!============== NO ERROR ==============!";
@@ -188,36 +155,36 @@ void displayMain() {
 					optimizeSetup_1();
 					cout << "=================== COMPRESSION ===================";
 					optimizeSetup_2();
-					int check = compressFile(info);
-					errorsMessage(check, 2, 6, 0);
+					compressFile();
+					exit(0);
 				}
 				case 1: {
 					optimizeSetup_1();
 					cout << "=================== EXTRACT HERE ===================";
 					optimizeSetup_2();
-					int check = extractHereFile(info);
-					errorsMessage(check, 2, 8, 1);
+					extractHereFile();
+					exit(0);
 				}
 				case 2: {
 					optimizeSetup_1();
 					cout << "=================== EXTRACT FILE ... ===================";
 					optimizeSetup_2();
-					int check = extractFile(info);
-					errorsMessage(check, 2, 10, 1);
+					extractFile();
+					exit(0);
 				}
 				case 3: {
 					optimizeSetup_1();
 					cout << "=================== COMPRESS FOLDER ===================";
 					optimizeSetup_2();
-					int check = compressFolder(info);
-					errorsMessage(check, 12, 4, 2);
+					compressFolder();
+					exit(0);
 				}
 				case 4: {
 					optimizeSetup_1();
 					cout << "=================== DECOMPRESS FOLDER ===================";
 					optimizeSetup_2();
-					int check = decompressFolder(info);
-					errorsMessage(check, 12, 6, 2);
+					decompressFolder();
+					exit(0);
 				}
 				}
 			}
