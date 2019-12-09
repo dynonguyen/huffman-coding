@@ -23,6 +23,8 @@
 		 thuat toan RLE (Run Length Encoding)
 
 	//Project duoc cap nhat, sua chua tai: https://github.com/TuanNguyen2504/compress-static-huffman.git
+	//Project dung de tham khao. Neu co su dung trong muc dich lam do an vui long ghi nguon day du. Cam on !
+
 
 */
 
