@@ -239,19 +239,20 @@ int Huffman::encoding(char* in_path, char* out_path,int type) {
 	}
 
 	char c[MAX_BUFF];
+	char ch[MAX_BUFF];
 	while (1) {
 		int n = fread(&c, sizeof(char), MAX_BUFF, inFile);
-		
+		int count = 0;
 		for (int i = 0; i < n; ++i) {
 			int temp_c = c[i];
 			if (c[i] < 0)
 				temp_c = (int)(c[i] + 256);
-			for (int i = 0; i < this->bitCodeTable[temp_c].n_bit; ++i) {
+			for (int j = 0; j < this->bitCodeTable[temp_c].n_bit; ++j) {
 
-				if (this->bitCodeTable[temp_c].bits[i] == '1')
+				if (this->bitCodeTable[temp_c].bits[j] == '1')
 					out = out | (1 << pos_bit);	//shiftLeft bat bit 1 tai vi tri pos_bit
 				if (!pos_bit) {
-					fwrite(&out, sizeof(char), 1, outFile);
+					ch[count++] = out;
 					out = 0;
 					pos_bit = 7;
 				}
@@ -259,6 +260,7 @@ int Huffman::encoding(char* in_path, char* out_path,int type) {
 					--pos_bit;
 			}
 		}
+		fwrite(ch, sizeof(char), count, outFile);
 		//ki tu ket thuc file
 		if (feof(inFile))
 			break;
@@ -443,9 +445,6 @@ bool Huffman::decoding(char* in_path, char* out_path) {
 	//so ky tu hien tai
 	double countChar = 0;
 
-	//ky tu hien tai
-	char c[MAX_BUFF];
-
 	//mo file de ghi
 	FILE* out;
 	errno_t err_2 = fopen_s(&out, out_path, "wb");
@@ -453,9 +452,13 @@ bool Huffman::decoding(char* in_path, char* out_path) {
 		return 0;
 	}
 
+	char c[MAX_BUFF];
+	char ch[MAX_BUFF];
+
 	while (1) {
-		int count = fread(&c, sizeof(char), MAX_BUFF, in);
-		for (int k = 0; k < count; ++k) {
+		int n = fread(&c, sizeof(char), MAX_BUFF, in);
+		int count = 0;
+		for (int k = 0; k < n; ++k) {
 			for (int i = 7; i >= 0; --i) {
 				int getBit_i = (c[k] >> i) & 1;						//lay bit thu i cua ky tu c
 
@@ -466,13 +469,12 @@ bool Huffman::decoding(char* in_path, char* out_path) {
 
 				//Tim den node la chua ky tu
 				if (huffTree[pos_current].left == -1 && huffTree[pos_current].right == -1) {
-					fwrite(&huffTree[pos_current].c, sizeof(char), 1, out);
-
+					ch[count++] = huffTree[pos_current].c;
 					//tang so ky tu hien tai
 					++countChar;
-
 					//da du so ky tu
 					if (countChar == n_Char) {
+						fwrite(&ch, sizeof(char), count, out);
 						fclose(in);
 						fclose(out);
 						return true;
@@ -483,6 +485,7 @@ bool Huffman::decoding(char* in_path, char* out_path) {
 				}
 			}
 		}
+		fwrite(&ch, sizeof(char), count, out);
 		if (feof(in))
 			break;
 	}
