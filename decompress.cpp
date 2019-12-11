@@ -6,7 +6,7 @@ void extractHereFile() {
 	cout << ">> Enter the compression file path (EX: C:\\filename.winzip): ";
 	string in;
 	getline(cin, in);
-	
+	formatPath(in);
 	char* in_path = stringToCharArray(in);
 	//nhap phan mo rong file
 	string ex;
@@ -41,12 +41,14 @@ void extractFile() {
 	cout << ">> Enter the compression file path (EX: C:\\filename.winzip): ";
 	string in;
 	getline(cin, in);
+	formatPath(in);
 	char* in_path = stringToCharArray(in);
 	//file dau ra
 	gotoxy(2, 6);
 	cout << ">> Enter the path to the extracted folder (EX: C:\\FoderName): ";
 	string out;
 	getline(cin, out);
+	formatPath(out);
 	string ex;
 
 	do {
@@ -79,6 +81,7 @@ void decompressFolder() {
 	cout << ">> Enter the compression file path [C:\\filename.winzip]: ";
 	string in;
 	getline(cin, in);
+	formatPath(in);
 	if (isFolder(in))
 		throw "Not Compression File";
 	//lay ten cua folder

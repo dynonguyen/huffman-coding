@@ -24,6 +24,7 @@ string charArrayToString(char*);
 //Ham kiem tra duong path phai file nen khong
 bool isCompressionFile(const string&);
 
+void formatPath(string&);
 // ======================= CAC HAM HO TRO NEN-GIAI NEN FOLDER ====================== //
 
 //ham kiem tra 1 duong path co dan den 1 folder

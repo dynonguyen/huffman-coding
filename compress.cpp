@@ -66,6 +66,12 @@ bool isCompressionFile(const string& path) {
 	return false;
 }
 
+void formatPath(string& path) {
+	if (path[0] == '"' && path[path.length() - 1] == '"') {
+		path.erase(path.begin());
+		path.erase(path.begin() + path.length() - 1);
+	}
+}
 // ============================== NEN FILE ================================== //
 void compressFile() {
 	cout << ">> Enter the original file path (EX: C:\\filename.txt): ";
@@ -73,7 +79,7 @@ void compressFile() {
 	getline(cin, in);
 	if (!isFile(in) || isCompressionFile(in))
 		throw "Not File (The file has been compressed)";
-
+	formatPath(in);
 	char* in_path = stringToCharArray(in);
 	static int in_size = getSize(in_path);
 
@@ -190,7 +196,7 @@ void compressFolder() {
 	getline(cin, in);
 	if (!isFolder(in))
 		throw "Fail to read file";
-
+	formatPath(in);
 	//tao duong dan file nen
 	string out = in + FILE_NAME_EXTENSION_ENCODE;
 	char* out_path = stringToCharArray(out);

@@ -1,7 +1,3 @@
 
-"corpus-title - Copy (2).txt"
-"corpus-title - Copy (3).txt"
-"corpus-title - Copy (4).txt"
-"corpus-title - Copy (5).txt"
-"corpus-title - Copy.txt"
-"corpus-title.txt"
+"test_1.txt"
+"test_2.txt"
