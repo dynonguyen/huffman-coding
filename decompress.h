@@ -6,12 +6,16 @@
 // ================== GIAI NEN FILE ================== //
 
 //ham giai nen file tai path goc
-void extractHereFile();
+void extractHereFile(const string&);
 
 //ham giai nen file den 1 duong path khac
-void extractFile();
+void extractFile(const string&);
 
 // ================= GIAI NEN FOLDER ================ //
-void decompressFolder();
+void decompressFolder(const string&);
+void decompressFolderTo(const string& );
 
+// =========== GIAI NEN CHUNG CHO 2 LOAI ========== //
+void extractHere();
+void extractTo();
 #endif 

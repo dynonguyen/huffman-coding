@@ -167,7 +167,8 @@ void Huffman::createBitCodetable(int pos_root) {
 }
 
 bool Huffman::saveFreqStatisTable(FILE*& outFile) {
-
+	
+	fwrite(&this->formEncode, sizeof(char), 1, outFile);				//Ghi lai hinh thuc nen
 	fwrite(&this->typeEncode, sizeof(char), 1, outFile);				//Ghi Kieu nen
 	fwrite(&this->n_Node, sizeof(int), 1, outFile);						//Ghi so node freq > 0
 
@@ -202,6 +203,11 @@ int Huffman::encoding(char* in_path, char* out_path, int type) {
 			//Khong thanh cong
 			return 0;
 		}
+	//hinh thuc nen
+	if (type == 0)
+		this->formEncode = FILE_CHAR;
+	else
+		this->formEncode = FOLDER_CHAR;
 
 	//xay dung cay huffman
 	int pos_root = this->buildHuffmanTree();
@@ -385,6 +391,7 @@ bool Huffman::recreateHuffTree(FILE*& in) {
 	this->initHuffTree();
 
 	//doc kieu nen
+	fread(&this->formEncode, sizeof(char), 1, in);
 	fread(&this->typeEncode, sizeof(char), 1, in);
 
 	//neu kieu giai nen la RLE thi thoat ra khong doc nua

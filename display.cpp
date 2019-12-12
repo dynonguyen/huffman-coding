@@ -51,7 +51,7 @@ void menu() {
 	system("cls");
 	SetColor(TEXT_COLOR_PROGRAM_NAME);
 	gotoxy(5, 2);
-	cout << "=================== WINZIP PRO v.1.3 (LIMITED EDITION) ===================";
+	cout << "=================== WINZIP PRO v.2.0 (LIMITED EDITION) ===================";
 
 	SetColor(TEXT_COLOR_TITLE);
 	gotoxy(30, 4);
@@ -59,22 +59,18 @@ void menu() {
 
 	SetColor(TEXT_COLOR_TITLE);
 	gotoxy(30, 6);
-	cout << "2 -> EXTRACT HERE";
+	cout << "2 -> COMPRESS FOLDER";
 
 	SetColor(TEXT_COLOR_TITLE);
 	gotoxy(30, 8);
-	cout << "3 -> EXTRACT FILE...";
+	cout << "3 -> EXTRACT HERE";
 
 	SetColor(TEXT_COLOR_TITLE);
 	gotoxy(30, 10);
-	cout << "4 -> COMPRESS FOLDER";
-
-	SetColor(TEXT_COLOR_TITLE);
-	gotoxy(30, 12);
-	cout << "5 -> DECOMPRESS FOLDER...";
+	cout << "4 -> EXTRACT TO...";
 
 	SetColor(TEXT_COLOR_EXIT);
-	gotoxy(23, 14);
+	gotoxy(23, 12);
 	cout << "<===== Press ESC key to exit =====>";
 }
 
@@ -160,30 +156,23 @@ void displayMain() {
 				}
 				case 1: {
 					optimizeSetup_1();
-					cout << "=================== EXTRACT HERE ===================";
-					optimizeSetup_2();
-					extractHereFile();
-					exit(0);
-				}
-				case 2: {
-					optimizeSetup_1();
-					cout << "=================== EXTRACT FILE ... ===================";
-					optimizeSetup_2();
-					extractFile();
-					exit(0);
-				}
-				case 3: {
-					optimizeSetup_1();
 					cout << "=================== COMPRESS FOLDER ===================";
 					optimizeSetup_2();
 					compressFolder();
 					exit(0);
 				}
-				case 4: {
+				case 2: {
 					optimizeSetup_1();
-					cout << "=================== DECOMPRESS FOLDER ===================";
+					cout << "=================== EXTRACT HERE ===================";
 					optimizeSetup_2();
-					decompressFolder();
+					extractHere();
+					exit(0);
+				}
+				case 3: {
+					optimizeSetup_1();
+					cout << "=================== EXTRACT TO ... ===================";
+					optimizeSetup_2();
+					extractTo();
 					exit(0);
 				}
 				}

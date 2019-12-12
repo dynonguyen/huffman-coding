@@ -53,6 +53,8 @@ using namespace std;
 #define MAX_NODE 511		//cay nhi phan nen co 2n - 1 node (ma ASCII co 256 = n)
 #define MAX_BIT_CODE 2048   //so bit toi da cua mang bitCode[]
 #define MAX_BUFF 65536		//so luong luu tru toi da buffer khi doc file
+#define FILE_CHAR 'f'
+#define FOLDER_CHAR 'F'
 /* ==================== cau truc 1 node cua cay huffman ==================== */
 struct Node {
 	char c;				  //ky tu
@@ -84,6 +86,7 @@ public:
 	Node huffTree[MAX_NODE];						//cay huffman duoi dang array
 	int n_Node = 0;									//so node co tan so > 0 (dung de giai nen sau nay)
 	char typeEncode = 'h';							//loai nen neu co 1 ky tu thi nen theo RLE se tot hon
+	char formEncode;								//nen folder hay nen tai tin
 
 	bitCode bitCodeTable[256];						//chua day bit cua cac ky tu ASCII
 

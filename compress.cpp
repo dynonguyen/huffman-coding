@@ -199,6 +199,10 @@ void compressFolder() {
 
 	//luu lai cay thu muc
 	vector<string> path = saveDirectoryStructure(in);
+	//xoa file data.txt
+	string pathToData = getPathToFolder(in);
+	remove(stringToCharArray(pathToData + "data.txt"));
+
 	ofstream output(out_path, ios::binary | ios::app);
 	output << path.size();
 	for (int i = 0; i < path.size(); i++){

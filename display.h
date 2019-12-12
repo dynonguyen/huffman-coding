@@ -14,7 +14,7 @@
 #define TEXT_COLOR_ERROR 12
 #define TEXT_COLOR_NO_ERROR 11
 #define TEXT_COLOR 7
-#define MAX_OPTION 4
+#define MAX_OPTION 3
 
 //ham dua con tro den vi tri x, y
 void gotoxy(int , int );
