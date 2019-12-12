@@ -84,75 +84,41 @@ void decompressFolder() {
 	formatPath(in);
 	if (isFolder(in))
 		throw "Not Compression File";
-	//lay ten cua folder
-	string t = "";
-	for (int i = in.find(FILE_NAME_EXTENSION_ENCODE) - 1; i >= 0; --i) {
-		if (in[i] == '/' || in[i] == '\\')
-			break;
-		t += in[i];
-	}
-	string nameFolder = "";
-	for (int i = t.length() - 1; i >= 0; --i)
-		nameFolder += t[i];
-
-	char* in_path = stringToCharArray(in);
-	//lay ten filename de tao duong dan moi
-	string outFolder;
-	for (int i = 0; i < in.length(); ++i) {
-		if (in[i] == '.')
-			break;
-		outFolder += in[i];
-	}
-	outFolder += "_decode";
-
-	//tao folder giai nen
-	if (newFolder(outFolder) == 1)
-		throw "Fail to create folder";
-
+	string pathToFolder = getPathToFolder(in);
 	//mo file ghi lai cac duong dan
 	FILE* inFile;
-	errno_t err = fopen_s(&inFile, in_path, "rb");
+	errno_t err = fopen_s(&inFile, stringToCharArray(in), "rb");
 	if (inFile == NULL)
 		throw "Fail to read file";
 	int n;
 	fscanf_s(inFile, "%d", &n, 1);
 
 	//lay cac duong dan
-	vector<char*> path;
+	char* path;
 	vector<string> filePath;
-	path.resize(n);
-	filePath.resize(n);
 	for (int i = 0; i < n; i++) {
-
-		path[i] = new char[MAX_CHAR];
-		fgets(path[i], MAX_CHAR, inFile);
-
-		filePath[i] = outFolder + "\\";
-		string temp = charArrayToString(path[i]);
-		for (int j = temp.find(nameFolder); j < strlen(path[i]) - 1; ++j)
-			filePath[i] += path[i][j];
-
-		delete[] path[i];
+		path = new char[MAX_CHAR];
+		fgets(path, MAX_CHAR, inFile);
+		filePath.push_back(charArrayToString(path));
+		delete[] path;
 	}
-
+	
 	//tao cac folder
 	for (int i = 0; i < n; ++i) {
-		if (isFolder(filePath[i])) {
-			for (int j = filePath[i].find(nameFolder); j < filePath[i].size(); ++j) {
-				if (filePath[i][j] == '\\' || filePath[i][j] == '/')
-					newFolder(filePath[i].substr(0, j));
-				if (j == filePath[i].size() - 1)
-					newFolder(filePath[i].substr(0, j + 1));
-			}
+		string temp;
+		if (isFile(filePath[i])) {
+			temp = getPathToFolder(filePath[i]);
 		}
 		else {
-			string temp = getFolderPath(filePath[i]);
-			for (int j = temp.find(nameFolder); j < temp.size(); ++j) {
-				if (temp[j] == '\\' || temp[j] == '/')
-					newFolder(temp.substr(0, j));
-				if (j == temp.size() - 1)
-					newFolder(temp.substr(0, j + 1));
+			temp = filePath[i];
+			temp[temp.length() - 1] = '\\';
+		}	
+		for (int j = 0; j < temp.size(); ++j) {
+			if (temp[j] == '\\' || temp[j] == '/') {
+				//cout << pathToFolder + temp.substr(0, j) << endl;
+				newFolder(pathToFolder + temp.substr(0, j));
 			}
+			
 		}
 	}
 
@@ -164,7 +130,7 @@ void decompressFolder() {
 	//tien hanh giai nen
 	for (int i = 0; i < n; ++i){
 		if (!isFolder(filePath[i])) {
-			char* t_path = stringToCharArray(filePath[i]);
+			char* t_path = stringToCharArray(pathToFolder + filePath[i]);
 			int check = huff.decodingFolder(inFile, t_path);
 			if (check == 0)
 				throw "decompression error";

@@ -24,7 +24,11 @@ string charArrayToString(char*);
 //Ham kiem tra duong path phai file nen khong
 bool isCompressionFile(const string&);
 
+//Bo di dau " " neu co
 void formatPath(string&);
+
+//lay duong dan chinh den folder nen. vd C:/a/folder -> C:/a/
+string getPathToFolder(const string&);
 // ======================= CAC HAM HO TRO NEN-GIAI NEN FOLDER ====================== //
 
 //ham kiem tra 1 duong path co dan den 1 folder
@@ -38,9 +42,6 @@ int newFolder(const string&);
 
 // chay qua tung folder luu lai path (folder chua no)
 vector<string> saveDirectoryStructure(const string&);
-
-//ham lay duong dan folder chua file (vd: C:\folder\in.txt => C:\folder)
-string getFolderPath(const string&);
 
 // ================================== NEN FILE =================================== //
 void compressFile();

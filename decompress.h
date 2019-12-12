@@ -2,7 +2,7 @@
 #ifndef _DECOMPRESS_
 #define _DECOMPRESS_
 #include "compress.h"
-#define MAX_CHAR 200
+#define MAX_CHAR 300
 // ================== GIAI NEN FILE ================== //
 
 //ham giai nen file tai path goc

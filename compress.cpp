@@ -53,6 +53,7 @@ string charArrayToString(char* s) {
 	for (int i = 0; i < strlen(s); i++){
 		res += s[i];
 	}
+	res[strlen(s) - 1] = '\0';
 	return res;
 }
 
@@ -130,20 +131,6 @@ int newFolder(const string& path) {
 	return result;
 }
 
-string getFolderPath(const string& path) {
-	int pos_i = 0;
-	for(int i = path.size() - 1; i >= 0; --i)
-		if (path[i] == '/' || path[i] == '\\') {
-			pos_i = i;
-			break;
-		}
-	string result = "";
-	for (int i = 0; i < pos_i; ++i){
-		result += path[i];
-	}
-	return result;
-}
-
 vector<string> saveDirectoryStructure(const string& path) {
 	static vector<string> result;
 	vector<string> folder;
@@ -188,8 +175,13 @@ vector<string> saveDirectoryStructure(const string& path) {
 	return result;
 }
 
-// ======================= NEN 1 FOLDER CHUA FILE ======================== //
+string getPathToFolder(const string& path) {
+	for (int i = path.length() - 1; i >= 0; --i)
+		if (path[i] == '\\' || path[i] == '/')
+			return path.substr(0, i + 1);
+}
 
+// ======================= NEN 1 FOLDER CHUA FILE ======================== //
 void compressFolder() {
 	cout << ">> Enter the directory path [C:\\foldername]: ";
 	string in;
@@ -197,18 +189,22 @@ void compressFolder() {
 	if (!isFolder(in))
 		throw "Fail to read file";
 	formatPath(in);
+
+	//duong dan den folder ma bo qua ten folder
+	string pathToFolder = getPathToFolder(in);
+
 	//tao duong dan file nen
 	string out = in + FILE_NAME_EXTENSION_ENCODE;
 	char* out_path = stringToCharArray(out);
 
 	//luu lai cay thu muc
 	vector<string> path = saveDirectoryStructure(in);
-
 	ofstream output(out_path, ios::binary | ios::app);
 	output << path.size();
 	for (int i = 0; i < path.size(); i++){
 		//ghi lai duong dan de giai nen
-		output << path[i] << endl;
+		string temp(path[i], pathToFolder.length(), path[i].length());
+		output << temp << endl;
 	}
 	output.close();
 
