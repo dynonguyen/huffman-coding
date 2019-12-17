@@ -1,0 +1,38 @@
+﻿  compress.cpp
+  The contents of <filesystem> are only available with C++17 or later.
+G:\18120634_18120644\18120634_18120644\compress.cpp(9,22): warning C4244: '=': conversion from 'std::streamoff' to 'float', possible loss of data
+G:\18120634_18120644\18120634_18120644\compress.cpp(17,20): warning C4018: '<': signed/unsigned mismatch
+G:\18120634_18120644\18120634_18120644\compress.cpp(26,20): warning C4018: '<': signed/unsigned mismatch
+G:\18120634_18120644\18120634_18120644\compress.cpp(53,20): warning C4018: '<': signed/unsigned mismatch
+G:\18120634_18120644\18120634_18120644\compress.cpp(85,21): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+G:\18120634_18120644\18120634_18120644\compress.cpp(103,22): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+G:\18120634_18120644\18120634_18120644\compress.cpp(161,22): warning C4018: '<': signed/unsigned mismatch
+G:\18120634_18120644\18120634_18120644\compress.cpp(166,22): warning C4018: '<': signed/unsigned mismatch
+G:\18120634_18120644\18120634_18120644\compress.cpp(172,20): warning C4018: '<': signed/unsigned mismatch
+G:\18120634_18120644\18120634_18120644\compress.cpp(208,20): warning C4018: '<': signed/unsigned mismatch
+G:\18120634_18120644\18120634_18120644\compress.cpp(220,20): warning C4018: '<': signed/unsigned mismatch
+  decompress.cpp
+  The contents of <filesystem> are only available with C++17 or later.
+G:\18120634_18120644\18120634_18120644\decompress.cpp(79,29): warning C4474: 'fscanf_s' : too many arguments passed for format string
+G:\18120634_18120644\18120634_18120644\decompress.cpp(79,29): message : placeholders and their parameters expect 1 variadic arguments, but 2 were provided
+G:\18120634_18120644\18120634_18120644\decompress.cpp(101,21): warning C4018: '<': signed/unsigned mismatch
+G:\18120634_18120644\18120634_18120644\decompress.cpp(146,29): warning C4474: 'fscanf_s' : too many arguments passed for format string
+G:\18120634_18120644\18120634_18120644\decompress.cpp(146,29): message : placeholders and their parameters expect 1 variadic arguments, but 2 were provided
+G:\18120634_18120644\18120634_18120644\decompress.cpp(168,21): warning C4018: '<': signed/unsigned mismatch
+  display.cpp
+  The contents of <filesystem> are only available with C++17 or later.
+G:\18120634_18120644\18120634_18120644\display.cpp(8,14): warning C4838: conversion from 'int' to 'SHORT' requires a narrowing conversion
+G:\18120634_18120644\18120634_18120644\display.cpp(8,17): warning C4838: conversion from 'int' to 'SHORT' requires a narrowing conversion
+  Huffman.cpp
+  The contents of <filesystem> are only available with C++17 or later.
+G:\18120634_18120644\18120634_18120644\Huffman.cpp(61,55): warning C4805: '==': unsafe mix of type 'int' and type 'bool' in operation
+G:\18120634_18120644\18120634_18120644\Huffman.cpp(348,20): warning C4018: '<': signed/unsigned mismatch
+G:\18120634_18120644\18120634_18120644\Huffman.cpp(355,20): warning C4018: '<': signed/unsigned mismatch
+  Main.cpp
+  The contents of <filesystem> are only available with C++17 or later.
+  Generating code
+  Previous IPDB not found, fall back to full compilation.
+G:\18120634_18120644\18120634_18120644\compress.cpp(182): warning C4715: 'getPathToFolder': not all control paths return a value
+  All 373 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Finished generating code
+  18120634_18120644.vcxproj -> G:\18120634_18120644\Release\18120634_18120644.exe

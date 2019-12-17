@@ -22,12 +22,15 @@ char* stringToCharArray(const string& str) {
 }
 
 string changeFileExtension(const string& str, const string& fileName_Ex) {
-	string res = "";
-	for (int i = 0; i < str.length(); ++i) {
-		if (str[i] == '.')
+	string res = str;
+	int pos = 0;
+	for (int i = str.length(); i >= 0; --i) {
+		if (str[i] == '.') {
+			pos = i;
 			break;
-		res += str[i];
+		}		
 	}
+	res.erase(pos, res.length() - pos);
 	res += fileName_Ex;
 	return res;
 }
