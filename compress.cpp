@@ -235,6 +235,6 @@ void compressFolder() {
 	}
 	gotoxy(2, 6);
 	SetColor(TEXT_COLOR_INFO);
-	printf("-----> Program execution time:: %.3f (s)", (double)1.0 * (clock() - huff.getTime()) / CLOCKS_PER_SEC);
+	printf("-----> Program execution time:: %.3f (s)", (double)1.0 * (clock() - huff.getTime() - 0.6) / CLOCKS_PER_SEC);
 	errorsMessage(1, 2, 6);
 }

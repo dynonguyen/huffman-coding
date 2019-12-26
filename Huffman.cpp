@@ -402,7 +402,8 @@ bool Huffman::recreateHuffTree(FILE*& in) {
 
 	//doc so node
 	fread(&this->n_Node, sizeof(int), 1, in);
-
+	if (this->n_Node == 0)
+		return true;
 	char c;
 	int freq;
 	for (int i = 0; i < this->n_Node; i++) {
@@ -511,14 +512,18 @@ bool Huffman::decodingFolder(FILE*& in, char* out_path) {
 
 	//tai tao lai cay huffman
 	this->recreateHuffTree(in);
-
 	int pos_root = this->buildHuffmanTree();
 
 	this->countNode();
+	if (this->n_Node == 0) {
+		FILE* out;
+		errno_t err_2 = fopen_s(&out, out_path, "wb");
+		fclose(out);
+		return true;
+	}
 
 	//tao lai bang bitcode
 	this->createBitCodetable(pos_root);
-
 	//So chu trong file de tranh bi du bit
 	double n_Char = 0;
 	for (int i = 0; i < 256; i++) {
