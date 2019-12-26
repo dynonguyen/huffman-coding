@@ -51,7 +51,7 @@ void menu() {
 	system("cls");
 	SetColor(TEXT_COLOR_PROGRAM_NAME);
 	gotoxy(5, 2);
-	cout << "=================== WINZIP PRO v.2.0 (LIMITED EDITION) ===================";
+	cout << "=================== WINZIP PRO v.2.1 (LIMITED EDITION) ===================";
 
 	SetColor(TEXT_COLOR_TITLE);
 	gotoxy(30, 4);

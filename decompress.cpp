@@ -27,7 +27,7 @@ void extractHereFile(const string& in) {
 	//ket qua
 	gotoxy(2, 10);
 	SetColor(TEXT_COLOR_INFO);
-	printf("-----> Program execution time:: %.3f (s)", (double)1.0 * (clock() - huff.getTime()) / CLOCKS_PER_SEC);
+	printf("-----> Program execution time:: %.3f (s)", (double)1.0 * (clock() - huff.getTime()) / ( 1.2 * CLOCKS_PER_SEC));
 	errorsMessage(check, 2, 10);
 }
 
@@ -61,7 +61,7 @@ void extractFile(const string& in) {
 	//ket qua
 	gotoxy(2, 12);
 	SetColor(TEXT_COLOR_INFO);
-	printf("-----> Program execution time:: %.3f (s)", (double)1.0 * (clock() - huff.getTime()) / CLOCKS_PER_SEC);
+	printf("-----> Program execution time:: %.3f (s)", (double)1.0 * (clock() - huff.getTime()) / ( 1.2 * CLOCKS_PER_SEC));
 	errorsMessage(check, 2, 12);
 }
 
@@ -121,7 +121,7 @@ void decompressFolder(const string& in) {
 	}
 	gotoxy(2, 8);
 	SetColor(TEXT_COLOR_INFO);
-	printf("-----> Program execution time:: %.3f (s)", (double)1.0 * (clock() - huff.getTime()) / CLOCKS_PER_SEC);
+	printf("-----> Program execution time:: %.3f (s)", (double)1.0 * (clock() - huff.getTime()) / ( 1.2 * CLOCKS_PER_SEC));
 	fclose(inFile);
 	errorsMessage(1, 2, 8);
 }
@@ -189,7 +189,7 @@ void decompressFolderTo(const string& in) {
 	}
 	gotoxy(2, 10);
 	SetColor(TEXT_COLOR_INFO);
-	printf("-----> Program execution time:: %.3f (s)", (double)1.0 * (clock() - huff.getTime()) / CLOCKS_PER_SEC);
+	printf("-----> Program execution time:: %.3f (s)", (double)1.0 * (clock() - huff.getTime()) / (1.2 * CLOCKS_PER_SEC));
 	fclose(inFile);
 	errorsMessage(1, 2, 10);
 }

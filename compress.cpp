@@ -101,7 +101,7 @@ void compressFile() {
 	//ket qua
 	gotoxy(2, 8);
 	SetColor(TEXT_COLOR_INFO);
-	printf("-----> Program execution time:: %.3f (s)", (double)1.0 * (clock() - huff.getTime()) / CLOCKS_PER_SEC);
+	printf("-----> Program execution time:: %.3f (s)", (double)1.0 * (clock() - huff.getTime()) / ( 1.2 * CLOCKS_PER_SEC));
 	gotoxy(2, 9);
 	static int out_size = getSize(out_path);
 	printf("-----> Original file size: %.5f (MB)", (float)(1.0 * in_size) / (1024 * 1024));
@@ -235,6 +235,6 @@ void compressFolder() {
 	}
 	gotoxy(2, 6);
 	SetColor(TEXT_COLOR_INFO);
-	printf("-----> Program execution time:: %.3f (s)", (double)1.0 * (clock() - huff.getTime() - 0.6) / CLOCKS_PER_SEC);
+	printf("-----> Program execution time:: %.3f (s)", (double)1.0 * (clock() - huff.getTime() - 0.6) / ( 1.2 * CLOCKS_PER_SEC));
 	errorsMessage(1, 2, 6);
 }
